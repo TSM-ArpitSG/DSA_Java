@@ -9,11 +9,12 @@ public class InfiniteArraySearch_Q5 {
     private static int Ans(int[] arr, int target) {
     int start = 0;
     int end = 1;
-    int size=2;
+//    int size=end-start;
         while(target>arr[end]){
-            start=end+1;
-            end=end+size*2;
-            size=size*2;
+            int temp = end+1;
+            end=end+(end-start+1)*2;
+            start=temp;
+//            size=size*2;
         }
         return(BinarySearch(arr,target,start,end));
     }
