@@ -4,17 +4,20 @@ import java.util.Arrays;
 
 public class Merge_Sort {
     public static void main(String[] args) {
-        int[] arr = {2,3,1,5,7,6};
-        arr=merge_sort(arr);
-        System.out.print(Arrays.toString(arr));
+        int[] arr = {5,4,3,2,1};
+        merge_sort_inplace(arr,0,4);
+        System.out.println(Arrays.toString(arr));
+//        int[] ans=merge_sort(arr);
+//        System.out.println(Arrays.toString(arr));   // original array is not being modified.
+//        System.out.print(Arrays.toString(ans));
     }
 
     private static int[] merge_sort(int[] arr) {
         if(arr.length==1)
             return arr;
         int mid = arr.length/2;
-        int[] left = Arrays.copyOfRange(arr,0,mid);
-        int[] right = Arrays.copyOfRange(arr,mid,arr.length);//mid would be exclusive.
+        int[] left = merge_sort(Arrays.copyOfRange(arr,0,mid));//mid would be exclusive.
+        int[] right = merge_sort(Arrays.copyOfRange(arr,mid,arr.length));//till arr.length-1 index
         return merge(left,right);
     }
 
@@ -33,33 +36,34 @@ public class Merge_Sort {
             arr[k++]=second[j++];
         return arr;
     }
-}
-//    private static int[] merge_sort(int[] arr, int s, int e) {
-//        while(s<e){
-//            int mid = s+(e-s)/2;
-//             merge_sort(arr,s,mid);
-//             merge_sort(arr,mid+1,e);
-//            return merge(arr,s,mid,e);
-//        }
-//        return new int[]{-1};
-//    }
 
-//    private static int[] merge(int[] arr, int s, int mid, int e) {
+    private static void merge_sort_inplace(int[] arr, int s, int e) {
+        if(e-s==1)
+            return;
+        int mid = (s+e)/2;
+        merge_sort_inplace(arr,s,mid);
+        merge_sort_inplace(arr,mid,e);
+        merge2(arr,s,mid,e);
+    }
+
+    private static void merge2(int[] arr, int s, int mid, int e) {
 //        int n = mid;
 //        int m = e-mid;
-//        int[] new_arr = new int[m+n];
-//        int k=0;
-//        int i=0,j=mid+1;
-//        while(i<=n&&j<=e){
-//            if(arr[i]<arr[j])
-//                new_arr[k++]=arr[i++];
-//            else
-//                new_arr[k++]=arr[j++];
-//        }
-//        while(i<=n)
-//            new_arr[k++]=arr[i++];
-//        while(j<=e)
-//            new_arr[k++]=arr[j++];
-//        return new_arr;
-//    }
-//}
+        int[] new_arr = new int[e-s];
+        int k=0;
+        int i=s,j=mid;
+        while(i<mid&&j<e){
+            if(arr[i]<arr[j])
+                new_arr[k++]=arr[i++];
+            else
+                new_arr[k++]=arr[j++];
+        }
+        while(i<mid)
+            new_arr[k++]=arr[i++];
+        while(j<e)
+            new_arr[k++]=arr[j++];
+        for(int l = 0; l<new_arr.length; l++){
+         arr[s+l]=new_arr[l];
+         }
+    }
+}
